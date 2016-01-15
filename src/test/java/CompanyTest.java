@@ -8,7 +8,8 @@ public class CompanyTest {
 
     public static void main(String[] args) {
 //        testOnlyCustomers();
-        testCustomers1Dev();
+        testOnlyDevs();
+//        testCustomers1Dev();
     }
 
 
@@ -39,6 +40,16 @@ public class CompanyTest {
             new Customer(c).start();
         }
         new Developer(c).start();
+
+    }
+
+    public static void testOnlyDevs(){
+
+        Company c = new Company();
+
+        for (int i = 0; i < 5; i++) {
+            new Developer(c).start();
+        }
 
     }
 

@@ -1,5 +1,3 @@
-import java.util.concurrent.Semaphore;
-
 /**
  * Created by jonathan on 8-1-16.
  */
@@ -15,7 +13,8 @@ public class Developer extends CompanyMember {
     private void work(){
 
         try {
-            Thread.sleep(200);
+            System.out.println(toString() + "Working");
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -31,28 +30,26 @@ public class Developer extends CompanyMember {
         while (true){
 
             try {
+                work();
                 System.out.println(toString() + "now available");
                 company.productOwner.memberJoined.release();
 
                 if(company.productOwner.isInConversation()){
                     System.out.println(toString() + "PO in conversation");
-                    continue;
                 }else{
 
-                    company.developersWaiting ++;
+                    company.incrDevWaiting();
                     company.devWaiting.acquire();
-
+                    company.decrDevWaiting();
                     if(company.devMayEnter.tryAcquire()){
-                        company.developersWaiting --;
                         // in conversation
                         System.out.println(toString() + "in conversation");
                         company.endConv.acquire();
                         System.out.println(toString() + "left conversation");
 
                     }else{
-                        company.developersWaiting --;
-                        // may not enter , go back to work
-                        continue;
+                        System.out.println(toString() + "I may not enter");
+
                     }
 
 

@@ -38,8 +38,8 @@ public class ProductOwner extends CompanyMember {
                 System.out.println(toString() + "I am fixing my room");
                 memberJoined.acquire();
                 System.out.println(toString() + "Member joined");
-                final int cWaiting = company.customersWaiting;
-                final int dWaiting = company.developersWaiting;
+                final int cWaiting = company.getCustomersWaiting();
+                final int dWaiting = company.getDevelopersWaiting();
 
                 System.out.println("--------------\n devs:" + dWaiting + " \n custs: " + cWaiting + "\n --------------");
 
@@ -73,6 +73,7 @@ public class ProductOwner extends CompanyMember {
                         // see tryaquire developer
                         company.devMayEnter.release(4);
 
+                        company.devWaiting.release(dWaiting);
                         conversate();
                         company.endConv.release(4);
 

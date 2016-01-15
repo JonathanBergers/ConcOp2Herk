@@ -25,6 +25,27 @@ public class Company{
     public volatile int customersWaiting = 0;
     public volatile int developersWaiting = 0;
 
+    public void incrCustWaiting(){
+        customersWaiting ++;
+    }
+    public void incrDevWaiting(){
+        developersWaiting ++;
+    }
+    public void decrCustWaiting(){
+        customersWaiting --;
+    }
+    public void decrDevWaiting(){
+        developersWaiting --;
+    }
+
+    public int getCustomersWaiting() {
+        return customersWaiting;
+    }
+
+    public int getDevelopersWaiting() {
+        return developersWaiting;
+    }
+
     public Semaphore custWaiting, devWaiting, startCustConv, endConv, devMayEnter;
 
 

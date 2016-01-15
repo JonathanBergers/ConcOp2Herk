@@ -20,17 +20,18 @@ public class Customer extends CompanyMember{
         while(true){
 
             try {
-                company.productOwner.memberJoined.release();
-                // now wait for message of po
+
 
                 System.out.println(toString() + " complain");
-                company.customersWaiting ++;
+                company.incrCustWaiting();
+                company.productOwner.memberJoined.release();
+                // now wait for message of po
                 company.custWaiting.acquire();
 
                 System.out.println(toString() + "waiting to enter conv");
 
                 company.startCustConv.acquire();
-                company.customersWaiting --;
+                company.decrCustWaiting();
                 System.out.println(toString() + "in conversation");
                 company.endConv.acquire();
                 System.out.println(toString() + "left conversation");
