@@ -4,61 +4,28 @@ import java.util.concurrent.Semaphore;
 /**
  * Created by jonathan on 8-1-16.
  */
-public class Company extends Thread{
+public class Company{
 
+
+
+    public Company(){
+        this.productOwner = new ProductOwner(this);
+        devMayEnter = new Semaphore(0);
+        custWaiting = new Semaphore(0);
+        devWaiting = new Semaphore(0);
+        startCustConv = new Semaphore(0);
+        endConv = new Semaphore(0);
+        productOwner.start();
+
+
+
+    }
 
     public final ProductOwner productOwner;
-    private List<Customer> customers;
-    private List<Developer> developers;
-    public Semaphore customerWaiting, customerConv, developerConv;
+    public volatile int customersWaiting = 0;
+    public volatile int developersWaiting = 0;
 
-    public Company(ProductOwner productOwner) {
-        this.productOwner = productOwner;
-    }
-
-
-
-
-
-    public void onCustomerConversation(){
-
-        // release all customers waiting
-        // release 1 developer waiting
-        // release all developers to go forward, only one may aquire the conversation
-
-    }
-
-    public void onDeveloperConv(){
-        developerConv.release();
-
-    }
-
-
-    public void complainToCompany(){
-
-
-        productOwner.onMemberJoined();
-
-
-    }
-
-
-    public void niks(){
-
-
-
-    }
-
-
-
-
-    public ProductOwner getProductOwner(){
-        return productOwner;
-    }
-
-
-
-
+    public Semaphore custWaiting, devWaiting, startCustConv, endConv, devMayEnter;
 
 
 
