@@ -23,27 +23,27 @@ public class Customer extends CompanyMember{
 
 
                 System.out.println(toString() + " complain");
+
+
                 company.incrCustWaiting();
+                // mention product owner
                 company.productOwner.memberJoined.release();
-                // now wait for message of po
+
+                // wait for product owner to let cust in
                 company.custWaiting.acquire();
 
                 System.out.println(toString() + "waiting to enter conv");
 
+                //start conversation
                 company.startCustConv.acquire();
                 company.decrCustWaiting();
+
                 System.out.println(toString() + "in conversation");
+
+                // end conversation
                 company.endConv.acquire();
+
                 System.out.println(toString() + "left conversation");
-
-
-
-
-
-
-
-
-
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

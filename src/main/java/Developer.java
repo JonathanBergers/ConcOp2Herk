@@ -22,26 +22,30 @@ public class Developer extends CompanyMember {
 
     @Override
     public void run() {
+        try {
+            while (true){
 
 
-
-        //
-
-        while (true){
-
-            try {
                 work();
+
                 System.out.println(toString() + "now available");
+                // mention product owner
                 company.productOwner.memberJoined.release();
 
                 if(company.productOwner.isInConversation()){
                     System.out.println(toString() + "PO in conversation");
                 }else{
 
+                    // increment developers waiting in company
                     company.incrDevWaiting();
+
                     company.devWaiting.acquire();
+                    // decrement waiting
                     company.decrDevWaiting();
+                    //try to enter the conversation, this is the point where the
+                    // PO regulates the amount of devs allowed for a conversation
                     if(company.devMayEnter.tryAcquire()){
+
                         // in conversation
                         System.out.println(toString() + "in conversation");
                         company.endConv.acquire();
@@ -51,27 +55,12 @@ public class Developer extends CompanyMember {
                         System.out.println(toString() + "I may not enter");
 
                     }
-
-
                 }
-
-
-
-                // wait for message of product owner if
-
-                //check for enough developers
-
-
-                //check for customer try aquire
-
-                //make decision
-
-                //start conversation
-
-            }catch (InterruptedException e){
 
             }
 
+
+        }catch (InterruptedException e){
 
         }
     }

@@ -33,8 +33,6 @@ public class ProductOwner extends CompanyMember {
 
             try {
 
-
-
                 System.out.println(toString() + "I am fixing my room");
                 memberJoined.acquire();
                 System.out.println(toString() + "Member joined");
@@ -58,10 +56,11 @@ public class ProductOwner extends CompanyMember {
                         company.custWaiting.release(cWaiting);
                         // 1 developer is in the conversation, let the customers enter
                         company.startCustConv.release(cWaiting);
-
+                        inConversation = true;
                         conversate();
                         // end conv
                         company.endConv.release(cWaiting + 1);
+                        inConversation = false;
 
                     }
 
@@ -74,8 +73,10 @@ public class ProductOwner extends CompanyMember {
                         company.devMayEnter.release(4);
 
                         company.devWaiting.release(dWaiting);
+                        inConversation = true;
                         conversate();
                         company.endConv.release(4);
+                        inConversation = false;
 
                     }
                 }

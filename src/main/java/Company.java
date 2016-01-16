@@ -8,18 +8,27 @@ public class Company{
 
 
 
-    public Company(){
+    public Company(boolean withProductOwner){
         this.productOwner = new ProductOwner(this);
         devMayEnter = new Semaphore(0);
         custWaiting = new Semaphore(0);
         devWaiting = new Semaphore(0);
         startCustConv = new Semaphore(0);
         endConv = new Semaphore(0);
-        productOwner.start();
+        if(withProductOwner){
+            productOwner.start();
+        }
+
 
 
 
     }
+    public Company(){
+      this(true);
+
+    }
+
+
 
     public final ProductOwner productOwner;
     public volatile int customersWaiting = 0;
