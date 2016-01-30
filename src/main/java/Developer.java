@@ -42,13 +42,16 @@ public class Developer extends CompanyMember {
                     company.devWaiting.acquire();
                     // decrement waiting
                     company.decrDevWaiting();
+
                     //try to enter the conversation, this is the point where the
+
                     // PO regulates the amount of devs allowed for a conversation
                     if(company.devMayEnter.tryAcquire()){
-
+                        company.incrPeopleInConRoom();
                         // in conversation
                         System.out.println(toString() + "in conversation");
                         company.endConv.acquire();
+                        company.decrPeopleInConRoom();
                         System.out.println(toString() + "left conversation");
 
                     }else{

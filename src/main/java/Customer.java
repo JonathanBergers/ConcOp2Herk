@@ -37,12 +37,14 @@ public class Customer extends CompanyMember{
                 //start conversation
                 company.startCustConv.acquire();
                 company.decrCustWaiting();
+                company.incrPeopleInConRoom();
+
 
                 System.out.println(toString() + "in conversation");
 
                 // end conversation
                 company.endConv.acquire();
-
+                company.decrPeopleInConRoom();
                 System.out.println(toString() + "left conversation");
 
             } catch (InterruptedException e) {

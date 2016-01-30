@@ -6,7 +6,9 @@ import java.util.concurrent.Semaphore;
  */
 public class Company{
 
+    public Semaphore custWaiting, devWaiting, startCustConv, endConv, devMayEnter, beginCon;
 
+    private Semaphore mutexCustomersWaiting, mutexDevelopersWaiting, joinConversationMutex;
 
     public Company(boolean withProductOwner){
         this.productOwner = new ProductOwner(this);
@@ -15,6 +17,12 @@ public class Company{
         devWaiting = new Semaphore(0);
         startCustConv = new Semaphore(0);
         endConv = new Semaphore(0);
+        beginCon = new Semaphore(0);
+
+        joinConversationMutex = new Semaphore(1);
+
+        mutexCustomersWaiting = new Semaphore(1);
+        mutexDevelopersWaiting = new Semaphore(1);
         if(withProductOwner){
             productOwner.start();
         }
@@ -31,20 +39,68 @@ public class Company{
 
 
     public final ProductOwner productOwner;
-    public volatile int customersWaiting = 0;
-    public volatile int developersWaiting = 0;
+    private int customersWaiting = 0;
+    private int developersWaiting = 0;
+    private int peopleInConversationRoom = 0;
 
     public void incrCustWaiting(){
-        customersWaiting ++;
+        try {
+            mutexCustomersWaiting.acquire();
+            customersWaiting ++;
+            mutexCustomersWaiting.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     public void incrDevWaiting(){
-        developersWaiting ++;
+        try {
+            mutexDevelopersWaiting.acquire();
+            developersWaiting ++;
+            mutexDevelopersWaiting.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     public void decrCustWaiting(){
-        customersWaiting --;
+        try {
+            mutexCustomersWaiting.acquire();
+            customersWaiting --;
+            mutexCustomersWaiting.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     public void decrDevWaiting(){
-        developersWaiting --;
+        try {
+            mutexDevelopersWaiting.acquire();
+            developersWaiting --;
+            mutexDevelopersWaiting.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    public void incrPeopleInConRoom(){
+        try {
+            joinConversationMutex.acquire();
+            peopleInConversationRoom ++;
+            joinConversationMutex.release();
+            if(productOwner.getConversationSize() == peopleInConversationRoom){
+                beginCon.release();
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void decrPeopleInConRoom(){
+        try {
+            joinConversationMutex.acquire();
+            peopleInConversationRoom --;
+            joinConversationMutex.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getCustomersWaiting() {
@@ -55,8 +111,7 @@ public class Company{
         return developersWaiting;
     }
 
-    public Semaphore custWaiting, devWaiting, startCustConv, endConv, devMayEnter;
-
-
-
+    public int getPeopleInConversationRoom() {
+        return peopleInConversationRoom;
+    }
 }

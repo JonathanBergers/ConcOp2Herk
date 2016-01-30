@@ -27,10 +27,10 @@ public class CompanyTest {
 //        onlyCustAndPo();
 
         // 1 po and developers
-        onlyDevsAndPo();
+//        onlyDevsAndPo();
 
         // 1 po and devs and customers
-//        all();
+        all();
 
     }
 
